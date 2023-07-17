@@ -1,5 +1,13 @@
+import Home from './pages/Home';
+import GlobalStyles from './styles/GlobalStyles';
+
 function App() {
-  return <div>초기 세팅 완료</div>;
+  return (
+    <>
+      <GlobalStyles />
+      <Home />
+    </>
+  );
 }
 
 export default App;
