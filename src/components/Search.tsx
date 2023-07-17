@@ -2,22 +2,35 @@ import { styled } from 'styled-components';
 import { useEffect, useState } from 'react';
 import { getData } from '../api/api';
 import useDebounce from '../hooks/useDebounce';
+import { useRecommendSearchDispatch } from '../store/SuggestedSearch-context';
 
 import { AiOutlineSearch } from 'react-icons/ai';
 
 const Search = () => {
   const [searchInput, setSearchInput] = useState<string>('');
+  const dispatch = useRecommendSearchDispatch();
 
   const debouncedSearchInput = useDebounce(searchInput, 350);
 
   const searchItems = async (search: string) => {
-    const response = await getData(search);
-    console.log(response);
+    if (search === '') {
+      dispatch({ type: 'UPDATE', payload: [] });
+    } else {
+      const response = await getData(search.trim());
+      if (response.length > 7) {
+        const sliceResponse = response.slice(0, 7);
+        dispatch({ type: 'UPDATE', payload: sliceResponse });
+      } else {
+        dispatch({ type: 'UPDATE', payload: response });
+      }
+    }
   };
 
   useEffect(() => {
-    if (debouncedSearchInput.length !== 0) {
+    if (debouncedSearchInput.trim().length !== 0) {
       searchItems(debouncedSearchInput);
+    } else {
+      searchItems('');
     }
   }, [debouncedSearchInput]);
 
