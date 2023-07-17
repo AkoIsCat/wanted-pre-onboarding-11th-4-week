@@ -6,6 +6,7 @@ const ContainerDiv = styled.div`
   height: auto;
   display: flex;
   align-items: center;
+  flex-direction: column;
   justify-content: center;
 `;
 
