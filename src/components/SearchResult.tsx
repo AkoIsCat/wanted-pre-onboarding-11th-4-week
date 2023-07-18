@@ -1,9 +1,77 @@
 import { styled } from 'styled-components';
-import { useState, useRef } from 'react';
-import { useRecommendSearchState } from '../store/SuggestedSearch-context';
+import { useRecommendSearchState } from '../store/RecommendSearch-context';
 import { AiOutlineSearch } from 'react-icons/ai';
 
 import Container from '../styles/Container';
+
+interface Props {
+  focusIndex: number;
+}
+
+const SearchResult = ({ focusIndex }: Props) => {
+  const recommendSearchData = useRecommendSearchState();
+
+  return (
+    <Container>
+      <ResultWrap>
+        <ResultWrapTitle>
+          <ResultWrapTitleInDiv>추천 검색어</ResultWrapTitleInDiv>
+        </ResultWrapTitle>
+        <ResultUl>
+          {recommendSearchData.length === 0 && (
+            <ResultWrapWrap>
+              <ResultWrapIcon>
+                <SearchIcon size='25' color='gray' />
+              </ResultWrapIcon>
+              <ResultWrapTitle>
+                <ResultWrapTitleInDiv>검색어 없음</ResultWrapTitleInDiv>
+              </ResultWrapTitle>
+            </ResultWrapWrap>
+          )}
+          {recommendSearchData.map((item: any, idx: number) => (
+            <ResultListItem key={item.sickCd} isfocus={focusIndex === idx ? 'true' : 'false'}>
+              <div className='icon'>
+                <SearchIcon
+                  size='27'
+                  color='gray'
+                  isfocus={focusIndex === idx ? 'true' : 'false'}
+                />
+              </div>
+              <div className='inner'>{item.sickNm}</div>
+            </ResultListItem>
+          ))}
+        </ResultUl>
+      </ResultWrap>
+    </Container>
+  );
+};
+
+export default SearchResult;
+
+const ResultWrapWrap = styled.div`
+  display: flex;
+  align-items: center;
+  background: #fff;
+`;
+
+const ResultWrapIcon = styled.div`
+  background: #fff;
+  padding: 2px 0px 2px 10px;
+`;
+
+const ResultWrapTitle = styled.div`
+  background: #fff;
+  padding: 5px 0px;
+  width: 32%;
+  border-radius: 30px 30px 0 0;
+`;
+
+const ResultWrapTitleInDiv = styled.div`
+  background: #fff;
+  padding: 10px 15px;
+  color: gray;
+  font-size: 15px;
+`;
 
 const ResultWrap = styled.div`
   width: 100vw;
@@ -13,31 +81,6 @@ const ResultWrap = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
-  .wrap {
-    display: flex;
-    align-items: center;
-    background: #fff;
-
-    .icon {
-      background: #fff;
-      padding: 2px 0px 2px 10px;
-    }
-  }
-
-  .title {
-    background: #fff;
-    padding: 5px 0px;
-    width: 32%;
-    border-radius: 30px 30px 0 0;
-
-    div {
-      background: #fff;
-      padding: 10px 15px;
-      color: gray;
-      font-size: 15px;
-    }
-  }
 `;
 
 const ResultUl = styled.ul`
@@ -51,7 +94,7 @@ const ResultUl = styled.ul`
 
 const ResultListItem = styled.li<{ isfocus?: string }>`
   padding: 15px 0;
-  background: ${props => (props.isfocus ? '#fff' : '#f3f3f3')};
+  background: ${props => (props.isfocus === 'true' ? '#f3f3f3' : '#fff')};
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -67,64 +110,24 @@ const ResultListItem = styled.li<{ isfocus?: string }>`
   }
 
   .icon {
-    background: #fff;
     padding: 2px 10px 2px 10px;
+    background: ${props => (props.isfocus === 'true' ? '#f3f3f3' : '#fff')};
   }
 
   .inner {
     padding: 5px 0px;
-    background: #fff;
+    background: ${props => (props.isfocus === 'true' ? '#f3f3f3' : '#fff')};
   }
 
   .innerTitle {
     font-size: 15px;
     color: gray;
-    background: #fff;
+    background: ${props => (props.isfocus === 'true' ? '#f3f3f3' : '#fff')};
   }
 `;
 
-const SearchIcon = styled(AiOutlineSearch)`
+const SearchIcon = styled(AiOutlineSearch)<{ isfocus?: string }>`
   background: #fff;
   padding-top: 5px;
+  background: ${props => (props.isfocus === 'true' ? '#f3f3f3' : '#fff')};
 `;
-
-const SearchResult = () => {
-  const [idx, setIndex] = useState(-1);
-
-  const refIndex = useRef<HTMLUListElement>(null);
-  console.log(refIndex);
-
-  const recommendSearchData = useRecommendSearchState();
-
-  return (
-    <Container>
-      <ResultWrap>
-        <div className='title'>
-          <div>추천 검색어</div>
-        </div>
-        <ResultUl ref={refIndex}>
-          {recommendSearchData.length === 0 && (
-            <div className='wrap'>
-              <div className='icon'>
-                <SearchIcon size='25' color='gray' />
-              </div>
-              <div className='title'>
-                <div>검색어 없음</div>
-              </div>
-            </div>
-          )}
-          {recommendSearchData.map((item: any, index: number) => (
-            <ResultListItem key={item.sickCd} isfocus={index === idx ? 'true' : 'false'}>
-              <div className='icon'>
-                <SearchIcon size='27' color='gray' />
-              </div>
-              <div className='inner'>{item.sickNm}</div>
-            </ResultListItem>
-          ))}
-        </ResultUl>
-      </ResultWrap>
-    </Container>
-  );
-};
-
-export default SearchResult;
