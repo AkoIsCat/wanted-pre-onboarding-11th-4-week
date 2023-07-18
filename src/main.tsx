@@ -1,10 +1,10 @@
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
-import SuggestedSearchProvider from './store/SuggestedSearch-context.tsx';
+import RecommenedSearchProvider from './store/RecommendSearch-context.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <SuggestedSearchProvider>
+  <RecommenedSearchProvider>
     <App />
-  </SuggestedSearchProvider>
+  </RecommenedSearchProvider>
 );
