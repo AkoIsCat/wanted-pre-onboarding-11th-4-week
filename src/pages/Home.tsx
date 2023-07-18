@@ -1,6 +1,5 @@
 import Header from '../components/Header';
 import Search from '../components/Search';
-import SearchResult from '../components/SearchResult';
 import Container from '../styles/Container';
 
 const Home = () => {
@@ -9,7 +8,6 @@ const Home = () => {
       <Header />
       <Container>
         <Search />
-        <SearchResult />
       </Container>
     </>
   );
