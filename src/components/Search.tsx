@@ -65,24 +65,25 @@ const Search = () => {
     }
 
     const trimInput = search.trim();
-    let dataToDispatch;
-
     const cachingData = localStorage.getItem(trimInput);
 
     if (cachingData) {
-      dataToDispatch = JSON.parse(cachingData);
+      const parseData = JSON.parse(cachingData);
+      dispatch({ type: 'UPDATE', payload: parseData });
     } else {
-      const response = await getData(trimInput);
-      const now = new Date();
-      const expiry = now.getTime();
+      try {
+        const response = await getData(trimInput);
+        const now = new Date();
+        const payload =
+          response.length > 7
+            ? { result: response.slice(0, 7), expiry: now.getTime() }
+            : { result: response, expiry: now.getTime() };
 
-      dataToDispatch = {
-        result: response.length > 7 ? response.slice(0, 7) : response,
-        expiry,
-      };
-
-      cachingLocalstorage(dataToDispatch, search.trim(), 5000);
-      dispatch({ type: 'UPDATE', payload: dataToDispatch });
+        dispatch({ type: 'UPDATE', payload });
+        cachingLocalstorage(payload.result, trimInput, 5000);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     }
   };
 
