@@ -18,20 +18,6 @@ const Search = () => {
   const debouncedSearchInput = useDebounce(searchInput, 350);
   const recommendData = useRecommendSearchState();
 
-  const searchItems = async (search: string) => {
-    if (search === '') {
-      dispatch({ type: 'UPDATE', payload: [] });
-    } else {
-      const response = await getData(search.trim());
-      if (response.length > 7) {
-        const sliceResponse = response.slice(0, 7);
-        dispatch({ type: 'UPDATE', payload: sliceResponse });
-      } else {
-        dispatch({ type: 'UPDATE', payload: response });
-      }
-    }
-  };
-
   useEffect(() => {
     if (debouncedSearchInput.trim().length !== 0) {
       searchItems(debouncedSearchInput);
@@ -41,13 +27,74 @@ const Search = () => {
     }
   }, [debouncedSearchInput]);
 
+  const cachingLocalstorage = (result: any, input: string, tts: number) => {
+    const now = new Date();
+    const cachedData = {
+      result,
+      expiry: now.getTime() + tts,
+    };
+    localStorage.setItem(input, JSON.stringify(cachedData));
+  };
+
+  const removeExpiredCaches = () => {
+    const now = new Date();
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key) {
+        const cachingData = localStorage.getItem(key);
+        if (cachingData) {
+          const parseData = JSON.parse(cachingData);
+          if (now.getTime() > parseData.expiry) {
+            localStorage.removeItem(key);
+          }
+        }
+      }
+    }
+  };
+
+  if (localStorage.length !== 0) {
+    setInterval(() => {
+      removeExpiredCaches();
+    }, 60000);
+  }
+
+  const searchItems = async (search: string) => {
+    if (search === '') {
+      dispatch({ type: 'UPDATE', payload: { expiry: 0, result: [] } });
+      return;
+    }
+
+    const trimInput = search.trim();
+    let dataToDispatch;
+
+    const cachingData = localStorage.getItem(trimInput);
+
+    if (cachingData) {
+      dataToDispatch = JSON.parse(cachingData);
+    } else {
+      const response = await getData(trimInput);
+      const now = new Date();
+      const expiry = now.getTime();
+
+      dataToDispatch = {
+        result: response.length > 7 ? response.slice(0, 7) : response,
+        expiry,
+      };
+
+      cachingLocalstorage(dataToDispatch, search.trim(), 5000);
+      dispatch({ type: 'UPDATE', payload: dataToDispatch });
+    }
+  };
+
   const keyDownHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
     switch (e.key) {
       case 'ArrowDown':
-        setIndex(prevIdx => (prevIdx + 1) % recommendData.length);
+        setIndex(prevIdx => (prevIdx + 1) % recommendData.result.length);
         break;
       case 'ArrowUp':
-        setIndex(prevIdx => (prevIdx - 1 + 7) % recommendData.length);
+        setIndex(
+          prevIdx => (prevIdx - 1 + recommendData.result.length) % recommendData.result.length
+        );
         break;
       case 'Escape':
         searchItems('');
@@ -55,8 +102,8 @@ const Search = () => {
         setIndex(-1);
         break;
       case 'Enter':
-        if (idx !== -1 && recommendData[idx]) {
-          const data = recommendData[idx].sickNm;
+        if (idx !== -1 && recommendData.result[idx]) {
+          const data = recommendData.result[idx].sickNm;
           searchItems(data);
           setSearchInput(data);
         }
