@@ -28,6 +28,28 @@
 ![styled-components](https://img.shields.io/badge/styled--components-1.12.0-28A745?logo=styled-components)
 ![axios](https://img.shields.io/badge/axios-1.4.0-%23671DDF?logo=axios&logoColor=%23671DDF)
 
+## 실행 방법
+
+프론트엔드
+
+```
+git clone https://github.com/AkoIsCat/wanted-pre-onboarding-11th-4-week.git
+
+npm install
+
+npm run dev
+```
+
+백엔드
+
+```
+git clone https://github.com/walking-sunset/assignment-api.git
+
+npm install
+
+npm start
+```
+
 ## 폴더 구조
 
 ```
