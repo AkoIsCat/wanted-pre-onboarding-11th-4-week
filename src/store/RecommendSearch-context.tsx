@@ -2,19 +2,24 @@ import React, { createContext, useReducer, Dispatch, useContext } from 'react';
 
 interface RecommendSearchAction {
   type: string;
-  payload: RecommnedData[];
+  payload: RecommnedData;
+}
+
+interface RecommnedDataItem {
+  sickCd: string;
+  sickNm: string;
 }
 
 interface RecommnedData {
-  sickCd: string;
-  sickNm: string;
+  expiry: number;
+  result: RecommnedDataItem[];
 }
 
 interface Children {
   children: React.ReactNode;
 }
 
-const recommendSearchReducer = (state: Array<RecommnedData>, action: RecommendSearchAction) => {
+const recommendSearchReducer = (state: RecommnedData, action: RecommendSearchAction) => {
   switch (action.type) {
     case 'UPDATE':
       return action.payload;
@@ -23,12 +28,15 @@ const recommendSearchReducer = (state: Array<RecommnedData>, action: RecommendSe
   }
 };
 
-export const RecommendSearchStateContext = createContext<RecommnedData[]>([]);
+const initialState: RecommnedData = {
+  expiry: 0,
+  result: [],
+};
+
+export const RecommendSearchStateContext = createContext<RecommnedData>(initialState);
 export const RecommendSearchDispatchContext = createContext<Dispatch<RecommendSearchAction>>(
   () => {}
 );
-
-const initialState: RecommnedData[] = [];
 
 const RecommenedSearchProvider = ({ children }: Children) => {
   const [suggestedSearchList, dispatch] = useReducer(recommendSearchReducer, initialState);
