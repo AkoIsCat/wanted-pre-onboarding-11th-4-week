@@ -2,7 +2,11 @@
 
 <br />
 
+<div align='center'>
+
 ![GIF](https://github.com/AkoIsCat/wanted-pre-onboarding-11th-4-week/assets/109052469/1413c621-035e-4267-aa01-348495b23076)
+
+</div>
 
 ## ABOUT
 
