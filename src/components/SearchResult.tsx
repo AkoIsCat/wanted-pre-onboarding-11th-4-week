@@ -18,7 +18,7 @@ const SearchResult = ({ focusIndex }: Props) => {
           <ResultWrapTitleInDiv>추천 검색어</ResultWrapTitleInDiv>
         </ResultWrapTitle>
         <ResultUl>
-          {recommendSearchData.length === 0 && (
+          {recommendSearchData.result && recommendSearchData.result.length === 0 && (
             <ResultWrapWrap>
               <ResultWrapIcon>
                 <SearchIcon size='25' color='gray' />
@@ -28,18 +28,19 @@ const SearchResult = ({ focusIndex }: Props) => {
               </ResultWrapTitle>
             </ResultWrapWrap>
           )}
-          {recommendSearchData.map((item: any, idx: number) => (
-            <ResultListItem key={item.sickCd} isfocus={focusIndex === idx ? 'true' : 'false'}>
-              <div className='icon'>
-                <SearchIcon
-                  size='27'
-                  color='gray'
-                  isfocus={focusIndex === idx ? 'true' : 'false'}
-                />
-              </div>
-              <div className='inner'>{item.sickNm}</div>
-            </ResultListItem>
-          ))}
+          {recommendSearchData.result &&
+            recommendSearchData.result.map((item: any, idx: number) => (
+              <ResultListItem key={item.sickCd} $isfocus={focusIndex === idx ? 'true' : 'false'}>
+                <div className='icon'>
+                  <SearchIcon
+                    size='27'
+                    color='gray'
+                    $isfocus={focusIndex === idx ? 'true' : 'false'}
+                  />
+                </div>
+                <div className='inner'>{item.sickNm}</div>
+              </ResultListItem>
+            ))}
         </ResultUl>
       </ResultWrap>
     </Container>
@@ -75,7 +76,7 @@ const ResultWrapTitleInDiv = styled.div`
 
 const ResultWrap = styled.div`
   width: 100vw;
-  margin: 50px 0;
+  margin: 30px 0;
   height: auto;
   display: flex;
   flex-direction: column;
@@ -92,9 +93,9 @@ const ResultUl = styled.ul`
   border-radius: 0 0 30px 30px;
 `;
 
-const ResultListItem = styled.li<{ isfocus?: string }>`
-  padding: 15px 0;
-  background: ${props => (props.isfocus === 'true' ? '#f3f3f3' : '#fff')};
+const ResultListItem = styled.li<{ $isfocus?: string }>`
+  padding: 10px 0;
+  background: ${props => (props.$isfocus === 'true' ? '#f3f3f3' : '#fff')};
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -111,23 +112,22 @@ const ResultListItem = styled.li<{ isfocus?: string }>`
 
   .icon {
     padding: 2px 10px 2px 10px;
-    background: ${props => (props.isfocus === 'true' ? '#f3f3f3' : '#fff')};
+    background: ${props => (props.$isfocus === 'true' ? '#f3f3f3' : '#fff')};
   }
 
   .inner {
     padding: 5px 0px;
-    background: ${props => (props.isfocus === 'true' ? '#f3f3f3' : '#fff')};
+    background: ${props => (props.$isfocus === 'true' ? '#f3f3f3' : '#fff')};
   }
 
   .innerTitle {
     font-size: 15px;
     color: gray;
-    background: ${props => (props.isfocus === 'true' ? '#f3f3f3' : '#fff')};
+    background: ${props => (props.$isfocus === 'true' ? '#f3f3f3' : '#fff')};
   }
 `;
 
-const SearchIcon = styled(AiOutlineSearch)<{ isfocus?: string }>`
-  background: #fff;
+const SearchIcon = styled(AiOutlineSearch)<{ $isfocus?: string }>`
   padding-top: 5px;
-  background: ${props => (props.isfocus === 'true' ? '#f3f3f3' : '#fff')};
+  background: ${props => (props.$isfocus === 'true' ? '#f3f3f3' : '#fff')};
 `;
