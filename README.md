@@ -24,6 +24,23 @@
 ![styled-components](https://img.shields.io/badge/styled--components-1.12.0-28A745?logo=styled-components)
 ![axios](https://img.shields.io/badge/axios-1.4.0-%23671DDF?logo=axios&logoColor=%23671DDF)
 
+## 폴더 구조
+
+```
+📦src
+ ┣ 📂api
+ ┣ 📂assets
+ ┣ 📂components
+ ┣ 📂hooks
+ ┣ 📂pages
+ ┣ 📂store
+ ┣ 📂styles
+ ┣ 📜App.tsx
+ ┣ 📜index.css
+ ┣ 📜main.tsx
+ ┗ 📜vite-env.d.ts
+```
+
 ## 📌 주요 기능
 
 - 검색어 추천 기능 (키보드로 이동 가능)
