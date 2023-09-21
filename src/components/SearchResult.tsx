@@ -1,16 +1,15 @@
 import { styled } from 'styled-components';
-import { useRecommendSearchState } from '../store/RecommendSearch-context';
 import { AiOutlineSearch } from 'react-icons/ai';
 
 import Container from '../styles/Container';
+import { Result } from '../hooks/useSearchResult';
 
 interface Props {
   focusIndex: number;
+  data: Result[] | undefined;
 }
 
-const SearchResult = ({ focusIndex }: Props) => {
-  const recommendSearchData = useRecommendSearchState();
-
+const SearchResult = ({ focusIndex, data }: Props) => {
   return (
     <Container>
       <ResultWrap>
@@ -18,7 +17,7 @@ const SearchResult = ({ focusIndex }: Props) => {
           <ResultWrapTitleInDiv>추천 검색어</ResultWrapTitleInDiv>
         </ResultWrapTitle>
         <ResultUl>
-          {recommendSearchData.result && recommendSearchData.result.length === 0 && (
+          {(!data || data === undefined || data.length === 0) && (
             <ResultWrapWrap>
               <ResultWrapIcon>
                 <SearchIcon size='25' color='gray' />
@@ -28,8 +27,8 @@ const SearchResult = ({ focusIndex }: Props) => {
               </ResultWrapTitle>
             </ResultWrapWrap>
           )}
-          {recommendSearchData.result &&
-            recommendSearchData.result.map((item: any, idx: number) => (
+          {data &&
+            data.map((item: any, idx: number) => (
               <ResultListItem key={item.sickCd} $isfocus={focusIndex === idx ? 'true' : 'false'}>
                 <div className='icon'>
                   <SearchIcon
