@@ -3,7 +3,7 @@ import axios from 'axios';
 export const getData = async (search?: string) => {
   try {
     if (search) {
-      const response = await axios.get('http://localhost:4000/sick', {
+      const response = await axios.get('https://slime-silicon-cobbler.glitch.me/sick', {
         params: {
           q: search,
         },
@@ -11,7 +11,7 @@ export const getData = async (search?: string) => {
       console.info('calling api');
       return response.data;
     } else {
-      const response = await axios.get('http://localhost:4000/sick');
+      const response = await axios.get('https://slime-silicon-cobbler.glitch.me/sick');
       console.info('calling api');
       return response.data;
     }
