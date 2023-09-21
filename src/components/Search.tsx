@@ -23,10 +23,10 @@ const Search = () => {
   const keyDownHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
     switch (e.key) {
       case 'ArrowDown':
-        setIndex(prevIdx => (prevIdx + 1) % data!.length);
+        data && setIndex(prevIdx => (prevIdx + 1) % data!.length);
         break;
       case 'ArrowUp':
-        setIndex(prevIdx => (prevIdx - 1 + data!.length) % data!.length);
+        data && setIndex(prevIdx => (prevIdx - 1 + data!.length) % data!.length);
         break;
       case 'Escape':
         setSearchInput('');
