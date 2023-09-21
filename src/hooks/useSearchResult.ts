@@ -14,7 +14,7 @@ export const useSearchResult = (string: string) => {
     {
       enabled: !!string,
       select: data => (data.length > 7 ? data.slice(0, 7) : data),
-      staleTime: 60000,
+      staleTime: 60 * 60 * 1000,
     }
   );
 };
